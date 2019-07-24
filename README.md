@@ -6,4 +6,4 @@ Quando utilizamos o Safari e queremos gerar o nosso PWA, este não suporta algum
 Temos que configurar corretamente e adicionar:
 
 - *apple-touch-icon*
-  *apple-mobile-web-app-status-bar* 
+- *apple-mobile-web-app-status-bar* 
