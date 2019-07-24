@@ -1,12 +1,12 @@
-# Temos uma configuração básica do PWA no arquivo manifest.json e o browser mostra todas as configurações através das informações desse arquivo.
+Temos uma configuração básica do PWA no arquivo manifest.json e o browser mostra todas as configurações através das informações desse arquivo.
 
-# Podemos visualizar como está a ficar a nossa aplicação à medida que avançamos atraves do emulador de dispositivo móvel:
+Podemos visualizar como está a ficar a nossa aplicação à medida que avançamos atraves do emulador de dispositivo móvel:
 
-## AndroidStudio
+# *Android Studio*
 [link to Android](https://developer.android.com/)
 
 
-Apos a instalacão basta seguir os eguintes passos:
+Apos a instalacão basta seguir os seguintes passos:
 
 ![Um](./img/lessons/1.png)
 
