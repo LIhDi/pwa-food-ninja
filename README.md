@@ -15,7 +15,7 @@ O primeiro passo para criar:
 
 - O browser ira agora instalar o nosso sw.js, e esse é um dos ciclos, e podemos "escutar" a este evento dentro do proprio sw.js, e podemos reagir a isto de diferentes formas, por exemplo:
     - Asset caching para podermos posteriormente acessar esses arquivos em cache enquanto estivermos offline.
-- O **Install event** apenas ocorre quando o sw.js é registrado.
+- O **Install event** apenas ocorre quando o sw.js está registrado.
 
 ![Tres](./img/lessons/3.png)
 
