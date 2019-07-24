@@ -1,15 +1,18 @@
-Para registrar o sw vamos no app.js e vamos adicionar:
+Apos registrarmos o nosso sw, o browser ira emitir um evento de **install**
+
+No sw acrescentamos:
 
 ```javascript
-if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => console.log('service worker registered', reg))
-      .catch(err => console.log('service worker not registered', err));
-  }
+self.addEventListener('install', evt => {
+    console.log('service worker installed');
+  });
 ```
-- Primeiro validamos se o browser suporta o sw, se no navegador conter a propriedade **serviceWorker**, então ele irá registrar.
+- O self está a referenciar ao proprio sw, então ele irá ouvir quando um **install event** ocorrer.
 
-- Service Workers apenas funciona com HTTPS, a unica exeção é quando estamos em localhost
+- Vimos tambem que quando o sw já esta registrado o install event so acontece quando o sw for modificado e so ira atualizar apos todas as instancias do antigo estiverem fechadas. Ele ira ficar no modo de espera.
+
+![Dois](./img/lessons/2.png)
+
 
 
 
