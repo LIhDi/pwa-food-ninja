@@ -1,23 +1,21 @@
-Temos uma configuração básica do PWA no arquivo manifest.json e o browser mostra todas as configurações através das informações desse arquivo.
+Para implementar corretamente PWA temos que entender o conceito de Service Workers, com ele será possivel:
 
-Podemos visualizar como está a ficar a nossa aplicação à medida que avançamos atraves do emulador de dispositivo móvel:
-
-# *Android Studio*
-[link to Android](https://developer.android.com/)
-
-
-Apos a instalacão basta seguir os seguintes passos:
-
-![Um](./img/lessons/1.png)
-
+- Mostrar o conteudo quando estiver offline, e assim será possivel abrir e ver o aplicativo mesmo sem conexão com a rede, isso so será possivel com cache assets e data.
+- Sincronização em background, ou seja quando o usuario fizer alguma atualizacao offline por exemplo alterar e-mail, a atualizacao ira ocorrer assim que houver uma conexao.
+- Mostrar notificações para o usuario.
 
 ![Dois](./img/lessons/2.png)
 
+*Services Workers* são arquivos JavaScripts, e em uma aplicação normal temos por exemplo arquivos .css .js .html
+Esses arquivos ficam em um servidor e quando acessamos a aplicação vimos esses arquivos no browser, por exemplo o html.
+Os nossos arquivos js estão conectados normalmente a nossa pagina html.
+
+![Um](./img/lessons/1.png)
+
+Quando criamos o *sw.js* ele roda separadamente em uma outra thread isolada do nosso js normal, por essa razao ele nao tem acesso ao DOM, por isso não pode modificar contents.
+
+O *SW* é um processo que roda em background e tem o objetivo de escutar e reagir aos eventos que ocorrem no browser, por exemplo:
+- Mostrar notificações e mensagens que possa chegar do servidor
+- Interceptar HTTP requests feitos no browser 
 
 ![Tres](./img/lessons/3.png)
-
-
-Lembrando que para rodar o projeto local,temos que:
-- Abrir o projeto no Visual Studio Code
-- Baixar a extensão "Live Server"
-- Dentro do arquivo index.html clicar com o direito e escolher a opção "Open with Live Server" 
