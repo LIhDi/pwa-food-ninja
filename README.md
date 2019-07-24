@@ -9,7 +9,7 @@ self.addEventListener('install', evt => {
 ```
 - O self está a referenciar ao proprio sw, então ele irá ouvir quando um **install event** ocorrer.
 
-- Vimos tambem que quando o sw já esta registrado o install event so acontece quando o sw for modificado e so ira atualizar apos todas as instancias do antigo estiverem fechadas. Ele ira ficar no modo de espera.
+- Vimos tambem que quando o sw já esta registrado o install event so acontece quando o sw for modificado e so irá atualizar apos todas as instancias do antigo estiverem fechadas. Ele irá ficar no modo de espera.
 
 ![Dois](./img/lessons/2.png)
 
