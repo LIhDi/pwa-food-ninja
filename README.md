@@ -1,23 +1,9 @@
-Temos uma configuração básica do PWA no arquivo manifest.json e o browser mostra todas as configurações através das informações desse arquivo.
+Quando utilizamos o Safari e queremos gerar o nosso PWA, este não suporta algumas configurações do manifest:
 
-Podemos visualizar como está a ficar a nossa aplicação à medida que avançamos atraves do emulador de dispositivo móvel:
+- *theme_color*
+- *icons*
 
-# *Android Studio*
-[link to Android](https://developer.android.com/)
+Temos que configurar corretamente e adicionar:
 
-
-Apos a instalacão basta seguir os seguintes passos:
-
-![Um](./img/lessons/1.png)
-
-
-![Dois](./img/lessons/2.png)
-
-
-![Tres](./img/lessons/3.png)
-
-
-Lembrando que para rodar o projeto local,temos que:
-- Abrir o projeto no Visual Studio Code
-- Baixar a extensão "Live Server"
-- Dentro do arquivo index.html clicar com o direito e escolher a opção "Open with Live Server" 
+- *apple-touch-icon*
+  *apple-mobile-web-app-status-bar* 
