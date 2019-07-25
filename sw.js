@@ -27,9 +27,20 @@ self.addEventListener('install', evt => {
   }))
 });
 
+
+
 // activate event
 self.addEventListener('activate', evt => {
-  console.log('service worker activated');
+  evt.waitUntil(
+    // caches.keys retorna uma lista com os nomes dos nossos caches
+    caches.keys().then(keys => {
+      // O que temos que fazer é apagar todos que sejam dieferentes do nosso que está versionado
+      return Promise.all(keys
+        .filter(key => key !== staticCacheName)
+        .map(key => caches.delete(key))
+      );
+    })
+  );
 });
 
 // fetch event
