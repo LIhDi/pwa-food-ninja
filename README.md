@@ -1,20 +1,29 @@
-Vamos começar por armazenar tudo que compoe a pagina inicial da nossa aplicação, isto é o que vai compor inicialmente o esqueleto da nossa aplicação.
+- Primeiro temos que interceptar os **fetch request** para verificar se o que está a ser pedido nos já possuimos no nosso cache
+- Caso os arquivos pedidos não estejam no nosso cache, então permitimos que o request chegue até o nosso servidor.
 
-Dentro do **install event**
+
+Dentro do **fetch event**
 
 ```javascript
-// install event
-self.addEventListener('install', evt => {
-  // Para que os nossos arquivos sejam armazenados e só então o sw instalado
-  // Usamos o waiUntil()
 
-  evt.waitUntil(
-    // Ira abrir esse cache que passamos o nome se existir caso contraario ira criar e abrir
-    caches.open(staticCacheName)
-      .then(cache =>{
-        // O metodo addAll vai ate o nosso servidor e ira adicionar ao cache a lista de requests que queremos as respostas
-        cache.addAll(assets);
-  }))
+// fetch event
+self.addEventListener('fetch', evt => {
+  // O respondWith permite pararmos a requisição de 
+  // chegar até o servidor e responder da forma como queremos
+  // E vamos responder com o arquivo do nosso cache mas antes temos que verificar se temos
+  evt.respondWith(
+    // Validamos se temos com o caches.match
+    caches.match(evt.request)
+    .then(cacheResp => {
+      // Ou retornamos a resposta se tivermos ou retornas o fetch request inicial
+      return cacheResp || fetch(evt.request)
+    })
+  )
 });
 
 ```
+
+- Para verificarmos basta ir no browser e veremos
+
+![Um](./img/lessons/1.png)
+![Dois](./img/lessons/2.png)
