@@ -1,38 +1,22 @@
-Até o momento carregamos no cache apenas os arquivos da página principal da nossa aplicação, se formos em contact ou about, não irá mostrar visto não termos adicionado os respectivos arquivos.
+Do jeito que fizemos agora com as paginas about e contact foi:
 
-- Vamos criar um cache separado, pois este vai depender do que o usuário vai utilizar, pois pode ter páginas que ele sequer vai abrir, por isso vamos desperdiçar recursos.
-- O que temos que fazer é um armazenamento dinâmico.
-- Se o usuário estiver online a clicar no contact page, então iremos armazenar esses arquivos.
-
-
-Nosso objetivo vai ser:
-
-1. Quando o usuário clicar e emitir o request para uma dessas páginas, irá ser feito um request ao nosso servidor, e atraves da resposta do servidor é que vamos armazenar esses arquivos.
-2. Vamos armazenar em um cache diferente.
-3. Vamos fazer no **fetch event** pois estamos a interceptar todos os requests.
+1. Se o usuário está online e visita a página ele armazena essa página.
+2. Temos os arquivos do pre cached que são os da página principal da nossa aplicação.
+3. E se o usuário tentar acessar uma página que ele não acessou online?
+4. O que podemos fazer é criar uma mensagem onde se o usuário estiver offline e tentar acessar, mostre uma mensagem "Desculpe não é possível acesssar esta página offline"
+5. Vamos criar a página fallback.html em pages/
+6. Vamos adicionar a página fallback.html a nossa constante assets
 
 ```javascript
-const dynamicCacheName = 'site-dynamic-v1';
+const assets = [
+  ...
+  '/pages/fallback.html'
+];
 ```
 
-4. Adicionamos mais uma constante para o nosso armazenamento dinâmico.
+7. E vamos adicionar ao nosso código que quando os arquivo não estiverem no cache e se estivermos offline, o **fetch** vai tentar ir no servidor, mas como estamos offline, vai retornar um erro.
 
 ```javascript
-// fetch event
-self.addEventListener('fetch', evt => {
-  //console.log('fetch event', evt);
-  evt.respondWith(
-    caches.match(evt.request).then(cacheRes => {
-      return cacheRes || fetch(evt.request).then(fetchRes => {
-        return caches.open(dynamicCacheName).then(cache => {
-          cache.put(evt.request.url, fetchRes.clone());
-          return fetchRes;
-        })
-      });
-    })
-  );
-});
+...
+}).catch(() => caches.match('/pages/fallback.html'))
 ```
-5. Vimos que se no fetch request for pedido um arquivo que foi armazenado no pre cachee então vamos retornar esse arquivo, agora caso não tenha vamos retornar o proprio request para ele ir no servidor e pegar esses arquivos.
-6. Vamos fazer exatamente como da primeira vez, e abrir o nosso dinamico cache e vamos passar o request que foi feito para pegar a url **evt.request.url** que queremos, e passamos também a **fetch response** clonada.
-7. caches.put() irá adicionar a url e o clone da resposta no nosso cache dinamico
