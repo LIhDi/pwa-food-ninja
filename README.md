@@ -1,32 +1,38 @@
-- Apesar de tudo estar a funcionar temos um problema se mudarmos o nosso index.html.
+Até o momento carregamos no cache apenas os arquivos da página principal da nossa aplicação, se formos em contact ou about, não irá mostrar visto não termos adicionado os respectivos arquivos.
 
-1. Quando abrimos a aplicação a primeira vez, o sw é registrado, e é chamado o nosso **install event**
-2. É no install que fazemos pre cache dos arquivos
-3. Mas vimos que o install não é chamado novamente caso fizermos um reload da pagina
-4. Então o que temos no nosso cache caso venhamos a mudar o index.html é uma versão desatualizada.
-5. Vimos também que o **install event** só é chamado novamente caso alteremos o arquivo sw.js
-6. E é isso que vamos fazer, quando alterarmos qualquer um desses arquivos que fizemos cache, vamos alterar o nome do nosso cache, para podermos versionar.
-7. Mas quando versionamos o nosso cache temos que dizer diretamente ao nosso interceptador em qual cache ele deve olhar pois agora temos informações duplicadas.
-8. Vamos apagar o nosso antigo cache.
-9. Isso vai ocorrer no **activate event**
-10. Como nesse ponto ja temos um sw ativado ele ira chamar o **activate** e já podemos apagar o nosso antigo cache
+- Vamos criar um cache separado, pois este vai depender do que o usuário vai utilizar, pois pode ter páginas que ele sequer vai abrir, por isso vamos desperdiçar recursos.
+- O que temos que fazer é um armazenamento dinâmico.
+- Se o usuário estiver online a clicar no contact page, então iremos armazenar esses arquivos.
 
-Dentro do **fetch event**
+
+Nosso objetivo vai ser:
+
+1. Quando o usuário clicar e emitir o request para uma dessas páginas, irá ser feito um request ao nosso servidor, e atraves da resposta do servidor é que vamos armazenar esses arquivos.
+2. Vamos armazenar em um cache diferente.
+3. Vamos fazer no **fetch event** pois estamos a interceptar todos os requests.
 
 ```javascript
+const dynamicCacheName = 'site-dynamic-v1';
+```
 
-// activate event
-self.addEventListener('activate', evt => {
-  evt.waitUntil(
-    // caches.keys retorna uma lista com os nomes dos nossos caches
-    caches.keys().then(keys => {
-      // O que temos que fazer é apagar todos que sejam dieferentes do nosso que está versionado
-      return Promise.all(keys
-        .filter(key => key !== staticCacheName)
-        .map(key => caches.delete(key))
-      );
+4. Adicionamos mais uma constante para o nosso armazenamento dinâmico.
+
+```javascript
+// fetch event
+self.addEventListener('fetch', evt => {
+  //console.log('fetch event', evt);
+  evt.respondWith(
+    caches.match(evt.request).then(cacheRes => {
+      return cacheRes || fetch(evt.request).then(fetchRes => {
+        return caches.open(dynamicCacheName).then(cache => {
+          cache.put(evt.request.url, fetchRes.clone());
+          return fetchRes;
+        })
+      });
     })
   );
 });
-
 ```
+5. Vimos que se no fetch request for pedido um arquivo que foi armazenado no pre cachee então vamos retornar esse arquivo, agora caso não tenha vamos retornar o proprio request para ele ir no servidor e pegar esses arquivos.
+6. Vamos fazer exatamente como da primeira vez, e abrir o nosso dinamico cache e vamos passar o request que foi feito para pegar a url **evt.request.url** que queremos, e passamos também a **fetch response** clonada.
+7. caches.put() irá adicionar a url e o clone da resposta no nosso cache dinamico
