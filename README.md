@@ -1,17 +1,20 @@
-A melhor parte de ter o pwa é ter capacidade 
-de usa-lo em modo offline, ou seja sem a conexão com a internet, mas ainda ainda pwa possui algumas limitações.
+Vamos começar por armazenar tudo que compoe a pagina inicial da nossa aplicação, isto é o que vai compor inicialmente o esqueleto da nossa aplicação.
 
-As informações vão ser armazenadas na cache, para serem carregadas quando precisarmos delas.
-A **Storage Cache** não nos dá toda autonomia necessária para lidar com as informações e os requests, iremos utilizar a **Aplication Cache**
+Dentro do **install event**
 
-- Quando estamos online a cache irá iniciar fazer, conforme interceptarmos os **fetch events** vamos aguardar a reposta do servidor e armazenar essas informações.
+```javascript
+// install event
+self.addEventListener('install', evt => {
+  // Para que os nossos arquivos sejam armazenados e só então o sw instalado
+  // Usamos o waiUntil()
 
-![Um](./img/lessons/1.png)
+  evt.waitUntil(
+    // Ira abrir esse cache que passamos o nome se existir caso contraario ira criar e abrir
+    caches.open(staticCacheName)
+      .then(cache =>{
+        // O metodo addAll vai ate o nosso servidor e ira adicionar ao cache a lista de requests que queremos as respostas
+        cache.addAll(assets);
+  }))
+});
 
-
-- Se ficarmos offline o sw irá interceptar esses requests e verificar que as informações já estão armazenadas no cache.
-
-![Dois](./img/lessons/2.png)
-
-Esse arquivos que são armazenados inicialmente na cache é o que chamamos de **pre cached**
-Essa funcionalidade de carregar a informação da cache irá funcionar offline e online, o que irá melhorar muito o nosso tempo de resposta.
+```
