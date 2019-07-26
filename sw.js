@@ -45,6 +45,17 @@ self.addEventListener('activate', evt => {
   );
 });
 
+// cache size limit function
+const limitCacheSize = (name, size) => {
+  caches.open(name).then(cache => {
+    cache.keys().then(keys => {
+      if(keys.length > size){
+        cache.delete(keys[0]).then(limitCacheSize(name, size));
+      }
+    });
+  });
+};
+
 // fetch event
 self.addEventListener('fetch', evt => {
   //console.log('fetch event', evt);
@@ -53,6 +64,9 @@ self.addEventListener('fetch', evt => {
       return cacheRes || fetch(evt.request).then(fetchRes => {
         return caches.open(dynamicCacheName).then(cache => {
           cache.put(evt.request.url, fetchRes.clone());
+          // Antes do retorno vamos chamar a função para limitar o tamanho
+          // Passando o nome da cache e o tamanho
+          limitCacheSize(dynamicCacheName, 15);
           return fetchRes;
         })
       });
