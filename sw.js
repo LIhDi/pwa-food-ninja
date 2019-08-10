@@ -14,12 +14,11 @@ const assets = [
   'https://fonts.googleapis.com/icon?family=Material+Icons',
   'https://fonts.gstatic.com/s/materialicons/v47/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2'
 ];
-
-// install event
+// install eve
 self.addEventListener('install', evt => {
   // Para que os nossos arquivos sejam armazenados e só então o sw instalado
   // Usamos o waiUntil()
-
+console.log('teste')
   evt.waitUntil(
     // Ira abrir esse cache que passamos o nome se existir caso contraario ira criar e abrir
     caches.open(staticCacheName)
@@ -45,6 +44,17 @@ self.addEventListener('activate', evt => {
   );
 });
 
+// cache size limit function
+const limitCacheSize = (name, size) => {
+  caches.open(name).then(cache => {
+    cache.keys().then(keys => {
+      if(keys.length > size){
+        cache.delete(keys[0]).then(limitCacheSize(name, size));
+      }
+    });
+  });
+};
+
 // fetch event
 self.addEventListener('fetch', evt => {
   //console.log('fetch event', evt);
@@ -53,6 +63,9 @@ self.addEventListener('fetch', evt => {
       return cacheRes || fetch(evt.request).then(fetchRes => {
         return caches.open(dynamicCacheName).then(cache => {
           cache.put(evt.request.url, fetchRes.clone());
+          // Antes do retorno vamos chamar a função para limitar o tamanho
+          // Passando o nome da cache e o tamanho
+          limitCacheSize(dynamicCacheName, 15);
           return fetchRes;
         })
       });
