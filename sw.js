@@ -14,13 +14,11 @@ const assets = [
   'https://fonts.googleapis.com/icon?family=Material+Icons',
   'https://fonts.gstatic.com/s/materialicons/v47/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2'
 ];
-
 // install eve
 self.addEventListener('install', evt => {
   // Para que os nossos arquivos sejam armazenados e só então o sw instalado
   // Usamos o waiUntil()
-  // TESTE
-
+console.log('teste')
   evt.waitUntil(
     // Ira abrir esse cache que passamos o nome se existir caso contraario ira criar e abrir
     caches.open(staticCacheName)
